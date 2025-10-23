@@ -1,11 +1,10 @@
 {
-  "date": "2025-10-23T20:30:00.000Z",
+  "date": "2025-10-23T15:59:21.743Z",
   "vegetables": {
-    "Carrot": 3,
-    "Tomato": 2,
-    "Banana": 1,
-    "Apple": 2,
-    "Grape": 1
+    "Carrot": 2,
+    "Cucumber": 1,
+    "Avocado": 1,
+    "Onion": 1
   },
-  "total": 9
+  "total": 5
 }
