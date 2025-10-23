@@ -29,32 +29,26 @@ jobs:
       - name: Format shopping list for SMS
         id: format-list
         run: |
-          MESSAGE=$(cat data/shopping-list.json | python3 -c "
+          cat data/shopping-list.json | python3 -c "
           import sys, json
           data = json.load(sys.stdin)
           veggies = data['vegetables']
           total = data['total']
 
-          msg = f'🥬 Your Shopping List ({total} items):\n'
+          msg = f'Your Shopping List ({total} items):\n'
           for veggie, count in sorted(veggies.items()):
-              msg += f'• {veggie}: {count}\n'
+              msg += f'{veggie}: {count}\n'
 
           print(msg.strip())
-          ")
-
-          # Escape message for JSON
-          MESSAGE="${MESSAGE//'%'/'%25'}"
-          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
-          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
-
-          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+          " > /tmp/sms_message.txt
 
       - name: Send SMS via Twilio
         run: |
+          MESSAGE=$(cat /tmp/sms_message.txt)
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json" \
           --data-urlencode "From=${{ secrets.TWILIO_PHONE_NUMBER }}" \
           --data-urlencode "To=${{ secrets.TO_PHONE_NUMBER }}" \
-          --data-urlencode "Body=${{ steps.format-list.outputs.message }}" \
+          --data-urlencode "Body=$MESSAGE" \
           -u "${{ secrets.TWILIO_ACCOUNT_SID }}:${{ secrets.TWILIO_AUTH_TOKEN }}"
 
       - name: SMS sent confirmation
