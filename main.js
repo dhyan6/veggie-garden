@@ -6,9 +6,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const CONFIG = {
     // GitHub configuration for committing shopping list
     github: {
-        owner: 'YOUR_GITHUB_USERNAME',  // Replace with your GitHub username
-        repo: 'veggie-garden',          // Replace with your repo name
-        token: 'YOUR_GITHUB_TOKEN'      // Replace with your GitHub personal access token
+        owner: 'dhyan6',
+        repo: 'veggie-garden',
+        token: '' // Token removed for security - configure in browser or skip GitHub commits
     },
     // Vegetable models configuration - multiple instances of each
     vegetables: [
