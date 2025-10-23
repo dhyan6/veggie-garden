@@ -976,71 +976,90 @@ async function saveAndEmailList() {
 }
 
 async function commitToGitHub(shoppingList) {
-    const { owner, repo, token } = CONFIG.github;
+    // Check if we're running on Netlify (has the function endpoint)
+    const isNetlify = window.location.hostname.includes('netlify.app') || window.location.hostname.includes('netlify.live');
 
-    // Removed token validation - will fail gracefully if not configured
-    if (!token || token === 'YOUR_GITHUB_TOKEN') {
-        console.warn('GitHub token not configured - skipping commit');
-        // Just return success without committing
-        return { message: 'Skipped GitHub commit (no token configured)' };
-    }
+    if (isNetlify) {
+        // Use Netlify serverless function (secure, uses environment variables)
+        const response = await fetch('/.netlify/functions/save-shopping-list', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(shoppingList)
+        });
 
-    const path = 'data/shopping-list.json';
-    const content = btoa(JSON.stringify(shoppingList, null, 2));
-    const message = `Update shopping list - ${new Date().toLocaleString()}`;
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save shopping list');
+        }
 
-    // Check if file exists to get its SHA
-    let sha = null;
-    try {
-        const getResponse = await fetch(
+        return await response.json();
+    } else {
+        // Local development - use direct GitHub API with token from config
+        const { owner, repo, token } = CONFIG.github;
+
+        if (!token || token === '') {
+            console.warn('GitHub token not configured - skipping commit');
+            return { message: 'Skipped GitHub commit (no token configured)' };
+        }
+
+        const path = 'data/shopping-list.json';
+        const content = btoa(JSON.stringify(shoppingList, null, 2));
+        const message = `Update shopping list - ${new Date().toLocaleString()}`;
+
+        // Check if file exists to get its SHA
+        let sha = null;
+        try {
+            const getResponse = await fetch(
+                `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+                {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                }
+            );
+
+            if (getResponse.ok) {
+                const data = await getResponse.json();
+                sha = data.sha;
+            }
+        } catch (error) {
+            console.log('File does not exist yet, will create new file');
+        }
+
+        // Create or update the file
+        const body = {
+            message: message,
+            content: content,
+            branch: 'main'
+        };
+
+        if (sha) {
+            body.sha = sha;
+        }
+
+        const response = await fetch(
             `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
             {
+                method: 'PUT',
                 headers: {
                     'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
             }
         );
 
-        if (getResponse.ok) {
-            const data = await getResponse.json();
-            sha = data.sha;
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to commit to GitHub');
         }
-    } catch (error) {
-        // File doesn't exist yet, which is fine
-        console.log('File does not exist yet, will create new file');
+
+        return await response.json();
     }
-
-    // Create or update the file
-    const body = {
-        message: message,
-        content: content,
-        branch: 'main'
-    };
-
-    if (sha) {
-        body.sha = sha;
-    }
-
-    const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-        {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        }
-    );
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to commit to GitHub');
-    }
-
-    return await response.json();
 }
 
 function showStatus(message, type) {
