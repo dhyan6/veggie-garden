@@ -74,11 +74,11 @@ const CONFIG = {
 
 **Security Note:** For production, consider using GitHub's OAuth flow or environment variables instead of hardcoding tokens.
 
-### 4. Setup SMS Automation with Twilio
+### 4. Setup WhatsApp Automation with Twilio
 
-Configure GitHub Secrets for Twilio SMS functionality:
+Configure GitHub Secrets for Twilio WhatsApp functionality:
 
-1. **Create a Twilio Account**
+1. **Create a Twilio Account (if you haven't already)**
    - Go to [https://www.twilio.com/try-twilio](https://www.twilio.com/try-twilio)
    - Sign up for a free account (includes trial credit)
    - Verify your phone number
@@ -88,10 +88,12 @@ Configure GitHub Secrets for Twilio SMS functionality:
    - Copy your **Account SID** (starts with "AC...")
    - Copy your **Auth Token** (click "Show" to reveal it)
 
-3. **Get a Twilio Phone Number**
-   - In Twilio Console, go to Phone Numbers > Manage > Buy a number
-   - Or use your trial number (shown on dashboard)
-   - Copy the phone number (format: +1234567890)
+3. **Join WhatsApp Sandbox**
+   - Go to: [https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn)
+   - Open WhatsApp on your phone
+   - Send the code shown (e.g., "join plus-nose") to **+1 415 523 8886**
+   - Wait for confirmation message
+   - Your sandbox WhatsApp number is: **+14155238886**
 
 4. **Add GitHub Secrets**
    - Go to your repository: Settings > Secrets and variables > Actions
@@ -101,12 +103,15 @@ Configure GitHub Secrets for Twilio SMS functionality:
 |-------------|-------|---------|
 | `TWILIO_ACCOUNT_SID` | Your Twilio Account SID | `ACxxxxxxxxxxxxxxxxxxxxx` |
 | `TWILIO_AUTH_TOKEN` | Your Twilio Auth Token | `your_auth_token_here` |
-| `TWILIO_PHONE_NUMBER` | Your Twilio phone number | `+15551234567` |
-| `TO_PHONE_NUMBER` | Your personal phone number | `+15559876543` |
+| `TWILIO_WHATSAPP_NUMBER` | Twilio Sandbox WhatsApp number | `+14155238886` |
+| `TO_PHONE_NUMBER` | Your personal phone number | `+12133708949` |
 
-**Note:** Phone numbers must be in E.164 format (e.g., +1234567890)
+**Note:**
+- Phone numbers must be in E.164 format (e.g., +1234567890)
+- WhatsApp Sandbox doesn't require recipient verification (unlike SMS trial)
+- You must join the sandbox first by sending the code via WhatsApp
 
-That's it! Now when you collect vegetables and click "Text me the shopping list", it will commit to GitHub and trigger an SMS to your phone!
+That's it! Now when you collect vegetables and click "Send to WhatsApp", it will commit to GitHub and trigger a WhatsApp message to your phone!
 
 ## Deployment
 
