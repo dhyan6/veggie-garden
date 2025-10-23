@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Veggie Garden - Collect Your Veggies!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="ui-overlay">
+        <div id="shopping-list-container">
+            <h2>Shopping List</h2>
+            <ul id="veggie-list"></ul>
+            <button id="save-email-btn">Save & Email My Veggie List</button>
+            <div id="status-message"></div>
+        </div>
+        <div id="instructions">
+            <p><strong>Controls:</strong> WASD to move</p>
+            <p>Collect all vegetables!</p>
+        </div>
+    </div>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading your veggie garden...</p>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

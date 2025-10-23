@@ -1,0 +1,53 @@
+name: Email Shopping List
+
+on:
+  push:
+    paths:
+      - 'data/shopping-list.json'
+    branches:
+      - main
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read shopping list
+        id: read-list
+        run: |
+          if [ -f data/shopping-list.json ]; then
+            echo "Shopping list found"
+            cat data/shopping-list.json
+          else
+            echo "Shopping list not found"
+            exit 1
+          fi
+
+      - name: Send email via SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Your Veggie Garden Shopping List"
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
+          body: |
+            Hello!
+
+            Here's your vegetable shopping list from the 3D Veggie Garden:
+
+            $(cat data/shopping-list.json | python3 -c "import sys, json; data = json.load(sys.stdin); print('Date: ' + data['date']); print('Total items: ' + str(data['total'])); print('\nVegetables:'); [print('- ' + v) for v in data['vegetables']]")
+
+            Happy shopping!
+
+            ---
+            Generated from 3D Veggie Garden
+          content_type: text/plain
+
+      - name: Email sent confirmation
+        run: echo "Email sent successfully!"

@@ -1,0 +1,213 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: #87CEEB;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100vh;
+}
+
+#ui-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+#shopping-list-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    pointer-events: all;
+}
+
+#shopping-list-container h2 {
+    color: #2c5f2d;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 8px;
+}
+
+#veggie-list {
+    list-style: none;
+    margin-bottom: 15px;
+    min-height: 40px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#veggie-list li {
+    padding: 8px 12px;
+    margin: 6px 0;
+    background: #f0f8f0;
+    border-left: 3px solid #4CAF50;
+    border-radius: 4px;
+    color: #333;
+    font-size: 0.95em;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+#save-email-btn {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#save-email-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+#save-email-btn:active {
+    transform: translateY(0);
+}
+
+#save-email-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#status-message {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    text-align: center;
+    min-height: 20px;
+}
+
+#status-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+#status-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+#status-message.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+#instructions p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+#instructions strong {
+    color: #4CAF50;
+}
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease-out;
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4CAF50;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    color: white;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* Scrollbar styling for veggie list */
+#veggie-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#veggie-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#veggie-list::-webkit-scrollbar-thumb {
+    background: #4CAF50;
+    border-radius: 3px;
+}
+
+#veggie-list::-webkit-scrollbar-thumb:hover {
+    background: #45a049;
+}
