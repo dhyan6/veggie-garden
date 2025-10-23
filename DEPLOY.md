@@ -21,12 +21,11 @@ Use this checklist to ensure everything is configured before deploying.
 
 Go to: `https://github.com/YOUR_USERNAME/veggie-garden/settings/secrets/actions`
 
-- [ ] `SMTP_SERVER` - Added and correct
-- [ ] `SMTP_PORT` - Added and correct
-- [ ] `SMTP_USERNAME` - Added and correct
-- [ ] `SMTP_PASSWORD` - Added and correct
-- [ ] `EMAIL_FROM` - Added and correct
-- [ ] `EMAIL_TO` - Added and correct
+Only 3 secrets needed:
+
+- [ ] `GMAIL_USERNAME` - Your Gmail address
+- [ ] `GMAIL_APP_PASSWORD` - Your 16-character Gmail app password
+- [ ] `EMAIL_TO` - Recipient email address
 
 ### 4. Models (Optional)
 

@@ -26,16 +26,16 @@ jobs:
             exit 1
           fi
 
-      - name: Send email via SMTP
+      - name: Send email via Gmail SMTP
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "Your Veggie Garden Shopping List"
           to: ${{ secrets.EMAIL_TO }}
-          from: ${{ secrets.EMAIL_FROM }}
+          from: ${{ secrets.GMAIL_USERNAME }}
           body: |
             Hello!
 

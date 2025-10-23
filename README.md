@@ -76,37 +76,30 @@ const CONFIG = {
 
 ### 4. Setup Email Automation
 
-Configure GitHub Secrets for email functionality:
+Configure GitHub Secrets for Gmail email functionality:
 
-1. Go to your repository on GitHub
-2. Navigate to Settings > Secrets and variables > Actions
-3. Add the following secrets:
+1. **Enable 2-Step Verification** in your Google Account
+   - Go to [https://myaccount.google.com/security](https://myaccount.google.com/security)
+   - Enable "2-Step Verification"
 
-| Secret Name | Description | Example |
-|-------------|-------------|---------|
-| `SMTP_SERVER` | Your SMTP server address | `smtp.gmail.com` |
-| `SMTP_PORT` | SMTP port (usually 587 or 465) | `587` |
-| `SMTP_USERNAME` | Your email username | `your-email@gmail.com` |
-| `SMTP_PASSWORD` | Your email password or app password | `your-app-password` |
-| `EMAIL_FROM` | Sender email address | `your-email@gmail.com` |
-| `EMAIL_TO` | Recipient email address | `recipient@example.com` |
+2. **Create a Gmail App Password**
+   - Go to [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+   - Select app: "Mail"
+   - Select device: "Other" → type "Veggie Garden"
+   - Click "Generate"
+   - Copy the 16-character password
 
-**Gmail Setup Example:**
+3. **Add GitHub Secrets**
+   - Go to your repository: Settings > Secrets and variables > Actions
+   - Click "New repository secret" and add these 3 secrets:
 
-1. Enable 2-Step Verification in your Google Account
-2. Generate an App Password:
-   - Go to Google Account > Security > 2-Step Verification > App passwords
-   - Create a new app password for "Mail"
-   - Use this password as `SMTP_PASSWORD`
-3. Use these settings:
-   - SMTP_SERVER: `smtp.gmail.com`
-   - SMTP_PORT: `587`
+| Secret Name | Value | Example |
+|-------------|-------|---------|
+| `GMAIL_USERNAME` | Your Gmail address | `your-email@gmail.com` |
+| `GMAIL_APP_PASSWORD` | The 16-char app password | `abcd efgh ijkl mnop` |
+| `EMAIL_TO` | Where to send the shopping list | `recipient@example.com` |
 
-**Alternative Email Services:**
-
-- **SendGrid**: Free tier available, use `smtp.sendgrid.net:587`
-- **Mailgun**: Free tier available, use `smtp.mailgun.org:587`
-- **AWS SES**: Cost-effective, use your SES SMTP endpoint
+That's it! Just 3 secrets needed.
 
 ## Deployment
 

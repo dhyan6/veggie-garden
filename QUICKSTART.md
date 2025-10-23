@@ -11,7 +11,7 @@
 
 2. **Set GitHub Secrets** (for email):
    - Go to: Settings > Secrets > Actions
-   - Add: `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_TO`
+   - Add only 3 secrets: `GMAIL_USERNAME`, `GMAIL_APP_PASSWORD`, `EMAIL_TO`
 
 3. **Deploy**:
    - Netlify: Connect repo, click Deploy
@@ -47,16 +47,13 @@ Walk into vegetables to collect them!
 4. Copy token
 5. Paste in `main.js`
 
-## Gmail SMTP Setup
+## Gmail App Password Setup
 
-1. Enable 2-Step Verification
-2. Create App Password: https://myaccount.google.com/apppasswords
-3. Add to GitHub Secrets:
-   - `SMTP_SERVER`: `smtp.gmail.com`
-   - `SMTP_PORT`: `587`
-   - `SMTP_USERNAME`: `your-email@gmail.com`
-   - `SMTP_PASSWORD`: `your-app-password`
-   - `EMAIL_FROM`: `your-email@gmail.com`
+1. Enable 2-Step Verification at: https://myaccount.google.com/security
+2. Create App Password at: https://myaccount.google.com/apppasswords
+3. Add to GitHub Secrets (Settings > Secrets > Actions):
+   - `GMAIL_USERNAME`: `your-email@gmail.com`
+   - `GMAIL_APP_PASSWORD`: `abcd efgh ijkl mnop` (16-char password)
    - `EMAIL_TO`: `recipient@example.com`
 
 ## File Structure

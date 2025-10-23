@@ -67,7 +67,7 @@ const CONFIG = {
 
 ## Step 3: Setup Email (GitHub Secrets)
 
-### For Gmail Users:
+This project uses **Gmail with App Password** for sending emails.
 
 1. **Enable 2-Step Verification:**
    - Go to: https://myaccount.google.com/security
@@ -78,33 +78,19 @@ const CONFIG = {
    - Select app: "Mail"
    - Select device: "Other" → type "Veggie Garden"
    - Click "Generate"
-   - Copy the 16-character password
+   - Copy the 16-character password (looks like: `abcd efgh ijkl mnop`)
 
 3. **Add GitHub Secrets:**
    - Go to your repo: `https://github.com/YOUR_USERNAME/veggie-garden/settings/secrets/actions`
-   - Click "New repository secret" for each:
+   - Click "New repository secret" and add these **3 secrets**:
 
-   | Name | Value |
-   |------|-------|
-   | `SMTP_SERVER` | `smtp.gmail.com` |
-   | `SMTP_PORT` | `587` |
-   | `SMTP_USERNAME` | `your-email@gmail.com` |
-   | `SMTP_PASSWORD` | `your-16-char-app-password` |
-   | `EMAIL_FROM` | `your-email@gmail.com` |
-   | `EMAIL_TO` | `recipient@example.com` |
+   | Secret Name | Value |
+   |-------------|-------|
+   | `GMAIL_USERNAME` | `your-email@gmail.com` |
+   | `GMAIL_APP_PASSWORD` | `abcd efgh ijkl mnop` (your 16-char app password) |
+   | `EMAIL_TO` | `recipient@example.com` (where to send the list) |
 
-### For Other Email Providers:
-
-**Outlook/Hotmail:**
-- SMTP_SERVER: `smtp.office365.com`
-- SMTP_PORT: `587`
-
-**Yahoo:**
-- SMTP_SERVER: `smtp.mail.yahoo.com`
-- SMTP_PORT: `587`
-
-**Custom/Work Email:**
-- Contact your IT department for SMTP settings
+**That's it!** Just 3 secrets. The workflow is pre-configured for Gmail.
 
 ## Step 4: Deploy Your Site
 
