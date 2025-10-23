@@ -1,4 +1,4 @@
-name: Send SMS Shopping List
+name: Send WhatsApp Shopping List
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  send-sms:
+  send-whatsapp:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,7 @@ jobs:
             exit 1
           fi
 
-      - name: Format shopping list for SMS
+      - name: Format shopping list for WhatsApp
         id: format-list
         run: |
           cat data/shopping-list.json | python3 -c "
@@ -35,21 +35,21 @@ jobs:
           veggies = data['vegetables']
           total = data['total']
 
-          msg = f'Your Shopping List ({total} items):\n'
+          msg = f'🥬 *Your Shopping List* ({total} items):\n\n'
           for veggie, count in sorted(veggies.items()):
-              msg += f'{veggie}: {count}\n'
+              msg += f'• {veggie}: {count}\n'
 
           print(msg.strip())
-          " > /tmp/sms_message.txt
+          " > /tmp/whatsapp_message.txt
 
-      - name: Send SMS via Twilio
+      - name: Send WhatsApp via Twilio
         run: |
-          MESSAGE=$(cat /tmp/sms_message.txt)
+          MESSAGE=$(cat /tmp/whatsapp_message.txt)
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json" \
-          --data-urlencode "From=${{ secrets.TWILIO_PHONE_NUMBER }}" \
-          --data-urlencode "To=${{ secrets.TO_PHONE_NUMBER }}" \
+          --data-urlencode "From=whatsapp:${{ secrets.TWILIO_WHATSAPP_NUMBER }}" \
+          --data-urlencode "To=whatsapp:${{ secrets.TO_PHONE_NUMBER }}" \
           --data-urlencode "Body=$MESSAGE" \
           -u "${{ secrets.TWILIO_ACCOUNT_SID }}:${{ secrets.TWILIO_AUTH_TOKEN }}"
 
-      - name: SMS sent confirmation
-        run: echo "SMS sent successfully!"
+      - name: WhatsApp sent confirmation
+        run: echo "WhatsApp message sent successfully!"
