@@ -1,6 +1,6 @@
 # 3D Veggie Garden
 
-An interactive 3D vegetable garden game built with Three.js where you control a character to collect vegetables and save your shopping list via GitHub Actions email automation.
+An interactive 3D vegetable garden game built with Three.js where you control a character to collect vegetables and save your shopping list via GitHub Actions SMS automation.
 
 ## Features
 
@@ -9,7 +9,7 @@ An interactive 3D vegetable garden game built with Three.js where you control a 
 - **Vegetable Collection**: Collect vegetables with collision detection
 - **Shopping List UI**: Real-time display of collected vegetables
 - **GitHub Integration**: Save list directly to your repository
-- **Email Automation**: Automatic email sending via GitHub Actions
+- **SMS Automation**: Automatic text message sending via Twilio and GitHub Actions
 - **No Backend Required**: Fully frontend-based using GitHub as the backend
 
 ## Quick Start
@@ -74,32 +74,39 @@ const CONFIG = {
 
 **Security Note:** For production, consider using GitHub's OAuth flow or environment variables instead of hardcoding tokens.
 
-### 4. Setup Email Automation
+### 4. Setup SMS Automation with Twilio
 
-Configure GitHub Secrets for Gmail email functionality:
+Configure GitHub Secrets for Twilio SMS functionality:
 
-1. **Enable 2-Step Verification** in your Google Account
-   - Go to [https://myaccount.google.com/security](https://myaccount.google.com/security)
-   - Enable "2-Step Verification"
+1. **Create a Twilio Account**
+   - Go to [https://www.twilio.com/try-twilio](https://www.twilio.com/try-twilio)
+   - Sign up for a free account (includes trial credit)
+   - Verify your phone number
 
-2. **Create a Gmail App Password**
-   - Go to [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-   - Select app: "Mail"
-   - Select device: "Other" → type "Veggie Garden"
-   - Click "Generate"
-   - Copy the 16-character password
+2. **Get Your Twilio Credentials**
+   - From your Twilio Console Dashboard: [https://console.twilio.com/](https://console.twilio.com/)
+   - Copy your **Account SID** (starts with "AC...")
+   - Copy your **Auth Token** (click "Show" to reveal it)
 
-3. **Add GitHub Secrets**
+3. **Get a Twilio Phone Number**
+   - In Twilio Console, go to Phone Numbers > Manage > Buy a number
+   - Or use your trial number (shown on dashboard)
+   - Copy the phone number (format: +1234567890)
+
+4. **Add GitHub Secrets**
    - Go to your repository: Settings > Secrets and variables > Actions
-   - Click "New repository secret" and add these 3 secrets:
+   - Click "New repository secret" and add these 4 secrets:
 
 | Secret Name | Value | Example |
 |-------------|-------|---------|
-| `GMAIL_USERNAME` | Your Gmail address | `your-email@gmail.com` |
-| `GMAIL_APP_PASSWORD` | The 16-char app password | `abcd efgh ijkl mnop` |
-| `EMAIL_TO` | Where to send the shopping list | `recipient@example.com` |
+| `TWILIO_ACCOUNT_SID` | Your Twilio Account SID | `ACxxxxxxxxxxxxxxxxxxxxx` |
+| `TWILIO_AUTH_TOKEN` | Your Twilio Auth Token | `your_auth_token_here` |
+| `TWILIO_PHONE_NUMBER` | Your Twilio phone number | `+15551234567` |
+| `TO_PHONE_NUMBER` | Your personal phone number | `+15559876543` |
 
-That's it! Just 3 secrets needed.
+**Note:** Phone numbers must be in E.164 format (e.g., +1234567890)
+
+That's it! Now when you collect vegetables and click "Text me the shopping list", it will commit to GitHub and trigger an SMS to your phone!
 
 ## Deployment
 

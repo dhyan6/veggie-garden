@@ -1,4 +1,4 @@
-name: Email Shopping List
+name: Send SMS Shopping List
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  send-email:
+  send-sms:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,28 +26,36 @@ jobs:
             exit 1
           fi
 
-      - name: Send email via Gmail SMTP
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: "Your Veggie Garden Shopping List"
-          to: ${{ secrets.EMAIL_TO }}
-          from: ${{ secrets.GMAIL_USERNAME }}
-          body: |
-            Hello!
+      - name: Format shopping list for SMS
+        id: format-list
+        run: |
+          MESSAGE=$(cat data/shopping-list.json | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          veggies = data['vegetables']
+          total = data['total']
 
-            Here's your vegetable shopping list from the 3D Veggie Garden:
+          msg = f'🥬 Your Shopping List ({total} items):\n'
+          for veggie, count in sorted(veggies.items()):
+              msg += f'• {veggie}: {count}\n'
 
-            $(cat data/shopping-list.json | python3 -c "import sys, json; data = json.load(sys.stdin); print('Date: ' + data['date']); print('Total items: ' + str(data['total'])); print('\nVegetables:'); [print('- ' + v) for v in data['vegetables']]")
+          print(msg.strip())
+          ")
 
-            Happy shopping!
+          # Escape message for JSON
+          MESSAGE="${MESSAGE//'%'/'%25'}"
+          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
+          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
 
-            ---
-            Generated from 3D Veggie Garden
-          content_type: text/plain
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
 
-      - name: Email sent confirmation
-        run: echo "Email sent successfully!"
+      - name: Send SMS via Twilio
+        run: |
+          curl -X POST "https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json" \
+          --data-urlencode "From=${{ secrets.TWILIO_PHONE_NUMBER }}" \
+          --data-urlencode "To=${{ secrets.TO_PHONE_NUMBER }}" \
+          --data-urlencode "Body=${{ steps.format-list.outputs.message }}" \
+          -u "${{ secrets.TWILIO_ACCOUNT_SID }}:${{ secrets.TWILIO_AUTH_TOKEN }}"
+
+      - name: SMS sent confirmation
+        run: echo "SMS sent successfully!"
