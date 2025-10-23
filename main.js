@@ -223,21 +223,22 @@ function setupMusicControl() {
     const music = document.getElementById('bg-music');
     const musicToggle = document.getElementById('music-toggle');
 
-    // Set volume and autoplay the music on page load
+    // Set volume and assume music will play
     music.volume = 0.3; // 30% volume for soothing background music
-    let isPlaying = false;
+    let isPlaying = true;
 
-    // Try to autoplay - may be blocked by browser, but attempt it
+    // Try to autoplay - start as playing by default
+    musicToggle.textContent = '🔊 Music';
+    musicToggle.classList.remove('muted');
+
     const playPromise = music.play();
 
     if (playPromise !== undefined) {
         playPromise.then(() => {
             // Autoplay started successfully
-            isPlaying = true;
-            musicToggle.textContent = '🔊 Music';
-            musicToggle.classList.remove('muted');
+            console.log('Music autoplay started');
         }).catch(err => {
-            // Autoplay blocked - user interaction needed
+            // Autoplay blocked - update UI to reflect that
             console.log('Autoplay blocked, click button to play:', err);
             isPlaying = false;
             musicToggle.textContent = '🔇 Music (Click to play)';
