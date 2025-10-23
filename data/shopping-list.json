@@ -1,0 +1,9 @@
+{
+  "date": "2025-10-23T18:30:00.000Z",
+  "vegetables": {
+    "Carrot": 2,
+    "Tomato": 3,
+    "Banana": 1
+  },
+  "total": 6
+}
