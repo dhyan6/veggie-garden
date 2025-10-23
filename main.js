@@ -961,7 +961,7 @@ async function saveAndEmailList() {
         // Commit to GitHub
         await commitToGitHub(shoppingList);
 
-        showStatus('List saved & email sent!', 'success');
+        showStatus('WhatsApp sent!', 'success');
 
         // Re-enable button after 3 seconds
         setTimeout(() => {
